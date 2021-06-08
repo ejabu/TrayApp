@@ -28,6 +28,8 @@ namespace TrayApp
         public MainWindow()
         {
             InitializeComponent();
+            this.Hide_Window();
+
             var contextMenuStrip = new ContextMenuStrip();
 
             // Toggle Show Menu Item
@@ -38,7 +40,7 @@ namespace TrayApp
 
             toggleShowMenuItem.Click += (e, s) =>
             {
-                Debug.WriteLine("something");
+                this.Show_Window();
             };
 
             // Exit Menu Item
@@ -62,5 +64,20 @@ namespace TrayApp
 
             TrayIcon.ContextMenuStrip = contextMenuStrip;
         }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            this.Hide_Window();
+        }
+        private void Hide_Window()
+        {
+            this.Hide();
+        }
+        private void Show_Window()
+        {
+            this.Show();
+        }
+
+
     }
 }
