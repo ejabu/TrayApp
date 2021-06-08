@@ -49,9 +49,9 @@ namespace TrayApp
                 Text = "Exit",
             };
 
-            toggleShowMenuItem.Click += (e, s) =>
+            exitMenuItem.Click += (e, s) =>
             {
-                Debug.WriteLine("something");
+                System.Windows.Application.Current.Shutdown();
             };
 
 
