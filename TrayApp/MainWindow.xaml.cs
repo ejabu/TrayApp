@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Windows.Interop;
 
 namespace TrayApp
 {
@@ -75,7 +76,31 @@ namespace TrayApp
         }
         private void Show_Window()
         {
+            this.AdjustWindowPosition();
             this.Show();
+        }
+        private void AdjustWindowPosition()
+        {
+            Screen sc = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            if (sc.WorkingArea.Top > 0)
+            {
+                Rect desktopWorkingArea = SystemParameters.WorkArea;
+                Left = desktopWorkingArea.Right - Width;
+                Top = desktopWorkingArea.Top;
+            }
+
+            else if ((sc.Bounds.Height - sc.WorkingArea.Height) > 0)
+            {
+                Rect desktopWorkingArea = SystemParameters.WorkArea;
+                Left = desktopWorkingArea.Right - Width;
+                Top = desktopWorkingArea.Bottom - Height;
+            }
+            else
+            {
+                Rect desktopWorkingArea = SystemParameters.WorkArea;
+                Left = desktopWorkingArea.Right - Width;
+                Top = desktopWorkingArea.Bottom - Height;
+            }
         }
 
 
