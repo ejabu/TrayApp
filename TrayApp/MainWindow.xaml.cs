@@ -41,7 +41,8 @@ namespace TrayApp
 
             toggleShowMenuItem.Click += (e, s) =>
             {
-                this.Show_Window();
+                var coor = GetMousePositionWindowsForms();
+                this.Show_Window(coor.X);
             };
 
             // Exit Menu Item
@@ -74,25 +75,31 @@ namespace TrayApp
         {
             this.Hide();
         }
-        private void Show_Window()
+        private void Show_Window(double cursorX)
         {
-            this.AdjustWindowPosition();
+            this.AdjustWindowPosition(cursorX);
             this.Show();
         }
-        private void AdjustWindowPosition()
+        private void AdjustWindowPosition(double cursorX)
         {
             Screen sc = Screen.FromHandle(new WindowInteropHelper(this).Handle);
             if (sc.WorkingArea.Top > 0)
             {
                 Rect desktopWorkingArea = SystemParameters.WorkArea;
-                Left = desktopWorkingArea.Right - Width;
+                var middleOfWindow = desktopWorkingArea.Right - (Width / 2);
+                var gapToMiddle = middleOfWindow - cursorX;
+                if (gapToMiddle < 0) gapToMiddle = 0;
+                Left = desktopWorkingArea.Right - Width - gapToMiddle;
                 Top = desktopWorkingArea.Top;
             }
 
             else if ((sc.Bounds.Height - sc.WorkingArea.Height) > 0)
             {
                 Rect desktopWorkingArea = SystemParameters.WorkArea;
-                Left = desktopWorkingArea.Right - Width;
+                var middleOfWindow = desktopWorkingArea.Right - (Width / 2);
+                var gapToMiddle = middleOfWindow - cursorX;
+                if (gapToMiddle < 0) gapToMiddle = 0;
+                Left = desktopWorkingArea.Right - Width - gapToMiddle;
                 Top = desktopWorkingArea.Bottom - Height;
             }
             else
@@ -101,6 +108,12 @@ namespace TrayApp
                 Left = desktopWorkingArea.Right - Width;
                 Top = desktopWorkingArea.Bottom - Height;
             }
+        }
+
+        public static System.Windows.Point GetMousePositionWindowsForms()
+        {
+            var point = System.Windows.Forms.Control.MousePosition;
+            return new System.Windows.Point(point.X, point.Y);
         }
 
 
