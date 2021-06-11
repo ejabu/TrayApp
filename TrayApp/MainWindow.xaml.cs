@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -113,7 +113,10 @@ namespace TrayApp
         public static System.Windows.Point GetMousePositionWindowsForms()
         {
             var point = System.Windows.Forms.Control.MousePosition;
-            return new System.Windows.Point(point.X, point.Y);
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            var pixelX = (int)((96 / g.DpiX) * point.X);
+            var pixelY = (int)((96 / g.DpiY) * point.X);
+            return new System.Windows.Point(pixelX, pixelY);
         }
 
 
